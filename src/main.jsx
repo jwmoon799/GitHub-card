@@ -51,7 +51,7 @@ function App() {
         <p className="description">GitHub 아이디 하나면 충분해요.<br />프로젝트와 기술 스택을 담은 개발자 명함을 만들어보세요.</p>
         <form onSubmit={submit} noValidate>
           <label htmlFor="username">GitHub 아이디</label>
-          <div className="input-row"><span className="at" aria-hidden="true">@</span><input id="username" value={username} onChange={event => {setUsername(event.target.value); if (!loading) setMessage('');}} placeholder="예: octocat" autoComplete="off" autoCapitalize="none" spellCheck="false" maxLength={80} aria-describedby="form-message" enterKeyHint="search" /><button type="submit" disabled={loading}>{loading ? '불러오는 중…' : '명함 만들기'} <span aria-hidden="true">↗</span></button></div>
+          <div className="input-row"><span className="at" aria-hidden="true">@</span><input disabled={loading} id="username" value={username} onChange={event => {setUsername(event.target.value); if (!loading) setMessage('');}} placeholder="예: octocat" autoComplete="off" autoCapitalize="none" spellCheck="false" maxLength={80} aria-describedby="form-message" enterKeyHint="search" /><button type="submit" disabled={loading}>{loading ? '불러오는 중…' : '명함 만들기'} <span aria-hidden="true">↗</span></button></div>
           <p className="form-message" id="form-message" role="status">{message || 'GitHub 아이디만 입력하세요. 로그인이나 토큰은 필요 없어요.'}</p>
         </form>
         {profile && !loading && <a className="view-card" href="#developer-card">내 명함 보기 <span aria-hidden="true">↓</span></a>}

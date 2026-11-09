@@ -15,6 +15,7 @@ async function requestGitHub(path) {
     if (!response.ok) throw new Error('GitHub에서 정보를 가져오지 못했어요. 잠시 후 다시 시도해주세요.');
     return await response.json();
   } catch (error) {
+    if (error instanceof SyntaxError) throw new Error('GitHub 응답을 읽지 못했어요. 잠시 후 다시 시도해주세요.');
     if (error.name === 'AbortError') throw new Error('응답 시간이 길어지고 있어요. 잠시 후 다시 시도해주세요.');
     if (error instanceof TypeError) throw new Error('인터넷 연결을 확인한 뒤 다시 시도해주세요.');
     throw error;
