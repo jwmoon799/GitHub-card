@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { summarizeRepositories } from './repositories.js';
 import { getMembership, getMembershipTier } from './membership.js';
+import { getAverageStars, formatAverageStars } from './stars.js';
 
 const formatCount = value => value >= 1000000
   ? new Intl.NumberFormat('ko-KR', { notation: 'compact', maximumFractionDigits: 1 }).format(value)
@@ -14,7 +15,7 @@ export function ProfileCard({ profile, repoState }) {
     <div className="identity">
       <div className="avatar">{!imageFailed ? <img key={profile.login} src={profile.avatar_url} alt={`${profile.login} 프로필 사진`} onError={() => setImageFailed(true)} /> : profile.login[0].toUpperCase()}</div>
       <div className="identity-text"><h2>{profile.name || profile.login}</h2><p>@{profile.login}</p></div>
-      <MembershipBadge createdAt={profile.created_at} />
+      <div className="membership-summary"><MembershipBadge createdAt={profile.created_at} /><AverageStars repoState={repoState} /></div>
     </div>
     <p className="bio">{profile.bio || '아직 등록된 소개가 없어요.'}</p>
     <div className="stats profile-stats"><div><strong title={profile.public_repos.toLocaleString('ko-KR')}>{formatCount(profile.public_repos)}</strong><span>공개 저장소</span></div><div><strong title={profile.followers.toLocaleString('ko-KR')}>{formatCount(profile.followers)}</strong><span>팔로워</span></div></div>
@@ -54,5 +55,17 @@ export function MembershipBadge({ createdAt }) {
     <strong>{membership.yearNumber}년차 개발자</strong>
     <span>GitHub 가입 기준</span>
     <small>{membership.joinYear}년 가입</small>
+  </div>;
+}
+
+function AverageStars({ repoState }) {
+  if (repoState.status === 'loading') return <div className="average-stars average-stars--pending" role="status">평균 계산 중…</div>;
+  const average = repoState.status === 'success' ? getAverageStars(repoState.items) : null;
+  const explanation = repoState.status === 'error'
+    ? '저장소 조회에 실패해 평균을 계산하지 못했어요.'
+    : average === null ? '공개 저장소가 없어 평균을 계산할 수 없어요.'
+    : `조회한 공개 저장소 ${repoState.items.length}개 기준, 저장소당 평균 스타 ${average.toLocaleString('ko-KR', { maximumFractionDigits: 2 })}개 (포크 포함)`;
+  return <div className="average-stars" title={explanation} aria-label={explanation}>
+    평균 <strong>{average === null ? '—' : formatAverageStars(average)}</strong> <span className="average-star-icon" aria-hidden="true">★</span>
   </div>;
 }
