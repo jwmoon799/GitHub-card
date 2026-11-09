@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { getMembership } from '../src/membership.js';
+import { getMembership, getMembershipTier } from '../src/membership.js';
 
 test('joining year is year 1, rather than completed years of employment', () => {
   const now = new Date('2026-11-09T10:00:00Z');
@@ -14,4 +14,10 @@ test('new-year boundaries use Korean calendar years for both dates', () => {
 test('missing, invalid, and future join dates do not show a fabricated badge', () => {
   const now = new Date('2026-11-09T10:00:00Z');
   for (const date of [undefined, '', 'invalid', '2027-01-01T00:00:00Z']) assert.equal(getMembership(date, now), null);
+});
+
+test('border tiers keep year 5 neutral and start animation at exactly year 10', () => {
+  for (const year of [1, 4, 5]) assert.equal(getMembershipTier(year), 'standard');
+  for (const year of [6, 7, 9]) assert.equal(getMembershipTier(year), 'established');
+  for (const year of [10, 11, 25]) assert.equal(getMembershipTier(year), 'veteran');
 });

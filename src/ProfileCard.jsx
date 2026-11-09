@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { summarizeRepositories } from './repositories.js';
-import { getMembership } from './membership.js';
+import { getMembership, getMembershipTier } from './membership.js';
 
 const formatCount = value => value >= 1000000
   ? new Intl.NumberFormat('ko-KR', { notation: 'compact', maximumFractionDigits: 1 }).format(value)
@@ -50,7 +50,7 @@ function RepositoryDetails({ repoState }) {
 export function MembershipBadge({ createdAt }) {
   const membership = getMembership(createdAt);
   if (!membership) return null;
-  return <div className="membership" aria-label={`GitHub 가입 연도 기준 ${membership.yearNumber}년차 개발자, ${membership.joinYear}년 가입`}>
+  return <div className={`membership membership--${getMembershipTier(membership.yearNumber)}`} aria-label={`GitHub 가입 연도 기준 ${membership.yearNumber}년차 개발자, ${membership.joinYear}년 가입`}>
     <strong>{membership.yearNumber}년차 개발자</strong>
     <span>GitHub 가입 기준</span>
     <small>{membership.joinYear}년 가입</small>

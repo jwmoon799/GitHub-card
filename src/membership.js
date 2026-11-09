@@ -8,3 +8,9 @@ export function getMembership(createdAt, now = new Date()) {
   const currentYear = Number(yearFormatter.format(now));
   return { joinYear, yearNumber: currentYear - joinYear + 1 };
 }
+
+export function getMembershipTier(yearNumber) {
+  if (yearNumber >= 10) return 'veteran';
+  if (yearNumber > 5) return 'established';
+  return 'standard';
+}

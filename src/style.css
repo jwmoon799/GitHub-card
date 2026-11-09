@@ -123,3 +123,31 @@ input:disabled { opacity: .75; cursor: wait; }
   .membership strong { font-size: 10px; }
   .membership span, .membership small { font-size: 8px; }
 }
+/* Only the membership badge border changes with the GitHub joining year. */
+@property --membership-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+.membership--established { border-color: #fdba74; }
+.membership--veteran {
+  border: 2px solid transparent;
+  padding: 6px 8px;
+  background:
+    linear-gradient(var(--card-inset), var(--card-inset)) padding-box,
+    conic-gradient(from var(--membership-angle), #ef4444, #fb923c, #fdba74, #ef4444, #fb923c, #fdba74, #ef4444) border-box;
+  animation: membership-flow 4s linear infinite;
+}
+@keyframes membership-flow {
+  from { --membership-angle: 0deg; }
+  to { --membership-angle: 360deg; }
+}
+@media (max-width: 480px) {
+  .membership--veteran { padding: 5px 6px; }
+}
+@media (max-width: 360px) {
+  .membership--veteran { padding: 4px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .membership--veteran { animation: none; }
+}
