@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import './style.css';
 import { getProfile, getRepositories } from './github.js';
-import { ProfileCard } from './ProfileCard.jsx';
+import { ProfileCard, MembershipBadge } from './ProfileCard.jsx';
 
 function App() {
   const [username, setUsername] = useState('');
@@ -61,7 +61,7 @@ function App() {
         <div className="preview-heading"><span>THE CARD</span><span>{profile ? '01 / YOUR PROFILE' : '01 / PREVIEW'}</span></div>
         {profile ? <ProfileCard key={profile.login} profile={profile} repoState={repoState} /> : hasSearched ? <div className="card empty-card"><span className="card-logo">&lt;/&gt; DevCard</span><h2>{loading ? '명함을 만들고 있어요' : '명함을 불러오지 못했어요'}</h2><p>{loading ? 'GitHub 공개 프로필을 확인하고 있습니다.' : '입력창 아래 안내를 확인한 뒤 다시 검색해주세요.'}</p></div> : <article className="card">
           <div className="card-top"><span className="card-logo">&lt;/&gt; DevCard</span><span className="sample">예시 데이터</span></div>
-          <div className="identity"><div className="avatar" aria-hidden="true">D<span>✦</span></div><div><h2>코드 만드는 사람</h2><p>@developer</p></div></div>
+          <div className="identity"><div className="avatar" aria-hidden="true">D<span>✦</span></div><div className="identity-text"><h2>코드 만드는 사람</h2><p>@developer</p></div><MembershipBadge createdAt="2024-01-01T00:00:00Z" /></div>
           <p className="bio">작은 아이디어를 쓸모 있는 서비스로.<br />만들고, 배우고, 기록합니다.</p>
           <div className="stats"><div><strong>24</strong><span>공개 저장소</span></div><div><strong>128</strong><span>팔로워</span></div><div><strong>3</strong><span>대표 언어</span></div></div>
           <div className="language-title">저장소 대표 언어 분포</div><div className="language-bar"><i /><i /><i /></div><div className="languages"><span>TypeScript <b>50%</b></span><span>JavaScript <b>30%</b></span><span>Python <b>20%</b></span></div>

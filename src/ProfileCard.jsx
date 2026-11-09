@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { summarizeRepositories } from './repositories.js';
+import { getMembership } from './membership.js';
 
 const formatCount = value => value >= 1000000
   ? new Intl.NumberFormat('ko-KR', { notation: 'compact', maximumFractionDigits: 1 }).format(value)
@@ -13,6 +14,7 @@ export function ProfileCard({ profile, repoState }) {
     <div className="identity">
       <div className="avatar">{!imageFailed ? <img key={profile.login} src={profile.avatar_url} alt={`${profile.login} 프로필 사진`} onError={() => setImageFailed(true)} /> : profile.login[0].toUpperCase()}</div>
       <div className="identity-text"><h2>{profile.name || profile.login}</h2><p>@{profile.login}</p></div>
+      <MembershipBadge createdAt={profile.created_at} />
     </div>
     <p className="bio">{profile.bio || '아직 등록된 소개가 없어요.'}</p>
     <div className="stats profile-stats"><div><strong title={profile.public_repos.toLocaleString('ko-KR')}>{formatCount(profile.public_repos)}</strong><span>공개 저장소</span></div><div><strong title={profile.followers.toLocaleString('ko-KR')}>{formatCount(profile.followers)}</strong><span>팔로워</span></div></div>
@@ -44,3 +46,13 @@ function RepositoryDetails({ repoState }) {
   </div>;
 }
 
+
+export function MembershipBadge({ createdAt }) {
+  const membership = getMembership(createdAt);
+  if (!membership) return null;
+  return <div className="membership" aria-label={`GitHub 가입 연도 기준 ${membership.yearNumber}년차 개발자, ${membership.joinYear}년 가입`}>
+    <strong>{membership.yearNumber}년차 개발자</strong>
+    <span>GitHub 가입 기준</span>
+    <small>{membership.joinYear}년 가입</small>
+  </div>;
+}
